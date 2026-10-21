@@ -1,0 +1,194 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Smooth theme transitions */
+html, body {
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Light Mode Overrides */
+html.light {
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+/* Light Mode Base */
+html.light body {
+  background-color: #f8fafc !important;
+  color: #1e293b !important;
+}
+
+/* Base backgrounds */
+html.light .bg-\[\#0b0d10\],
+html.light .bg-\[\#07080a\],
+html.light .bg-\[\#08090c\],
+html.light .bg-\[\#090b0f\],
+html.light .bg-\[\#090b0e\],
+html.light .bg-\[\#0a0c10\],
+html.light .bg-\[\#0c0e13\],
+html.light .bg-\[\#0d0f14\],
+html.light .bg-\[\#0f1217\] {
+  background-color: #f8fafc !important;
+  color: #1e293b !important;
+}
+
+html.light .bg-\[\#0e1217\] {
+  background-color: #f1f5f9 !important;
+}
+
+/* Card surfaces */
+html.light .bg-\[\#12151c\],
+html.light .bg-\[\#12161c\],
+html.light .bg-\[\#131720\],
+html.light .bg-\[\#131720\]\/95,
+html.light .bg-\[\#141820\],
+html.light .bg-\[\#141820\]\/90,
+html.light .bg-\[\#141820\]\/95,
+html.light .bg-\[\#141822\],
+html.light .bg-\[\#161a22\],
+html.light .bg-\[\#161b24\],
+html.light .bg-\[\#171b24\],
+html.light .bg-\[\#171b24\]\/95,
+html.light .bg-\[\#181c25\],
+html.light .bg-\[\#11141a\] {
+  background-color: #ffffff !important;
+  color: #1e293b !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.06), 0 2px 6px -1px rgba(0, 0, 0, 0.04);
+}
+
+html.light .bg-zinc-900,
+html.light .bg-zinc-900\/90 {
+  background-color: #ffffff !important;
+}
+
+html.light .bg-zinc-900\/60,
+html.light .bg-zinc-900\/40 {
+  background-color: #ffffff !important;
+}
+
+html.light .bg-zinc-800,
+html.light .bg-zinc-800\/80 {
+  background-color: #f1f5f9 !important;
+}
+
+/* Header & Navbar */
+html.light header.bg-\[\#0d0f14\]\/90,
+html.light header.bg-\[\#0d0f14\]\/80 {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border-color: #e2e8f0 !important;
+}
+
+html.light .bg-\[\#08090c\] {
+  background-color: #f1f5f9 !important;
+  border-color: #e2e8f0 !important;
+}
+
+/* Mobile Bottom Nav in light mode */
+html.light .bg-\[\#0b0e14\]\/95 {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Borders */
+html.light .border-white\/5,
+html.light .border-white\/10,
+html.light .border-white\/15,
+html.light .border-white\/20,
+html.light .border-zinc-800,
+html.light .border-zinc-800\/80,
+html.light .border-zinc-800\/90,
+html.light .border-zinc-700 {
+  border-color: #e2e8f0 !important;
+}
+
+/* Primary text & headings */
+html.light h1.text-white,
+html.light h2.text-white,
+html.light h3.text-white,
+html.light h4.text-white,
+html.light .text-white {
+  color: #0f172a !important;
+}
+
+html.light .text-zinc-200,
+html.light .text-zinc-300 {
+  color: #334155 !important;
+}
+
+html.light .text-zinc-400 {
+  color: #64748b !important;
+}
+
+html.light .text-zinc-500,
+html.light input::placeholder,
+html.light textarea::placeholder {
+  color: #64748b !important;
+}
+
+html.light .text-zinc-600 {
+  color: #475569 !important;
+}
+
+html.light .text-emerald-400 {
+  color: #047857 !important;
+}
+
+html.light .text-blue-400 {
+  color: #1d4ed8 !important;
+}
+
+html.light .text-purple-400 {
+  color: #7e22ce !important;
+}
+
+html.light .text-amber-400 {
+  color: #b45309 !important;
+}
+
+html.light .text-orange-400 {
+  color: #c2410c !important;
+}
+
+/* Interactive chips & subtle buttons */
+html.light .bg-black\/40,
+html.light .bg-black\/60,
+html.light .bg-white\/5 {
+  background-color: #f1f5f9 !important;
+  color: #1e293b !important;
+  border-color: #e2e8f0 !important;
+}
+
+html.light .bg-white\/10 {
+  background-color: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+/* Preserve bright text for solid accent buttons and badges */
+html.light .bg-\[\#ff5722\],
+html.light .bg-\[\#ff5722\] *,
+html.light .bg-\[\#f4511e\],
+html.light .bg-\[\#f4511e\] *,
+html.light button.bg-\[\#ff5722\],
+html.light button.bg-\[\#f4511e\],
+html.light a.bg-\[\#ff5722\],
+html.light a.bg-\[\#f4511e\],
+html.light .bg-orange-500,
+html.light .bg-orange-500 *,
+html.light .bg-emerald-500,
+html.light .bg-emerald-500 * {
+  color: #ffffff !important;
+}
+
+/* Ensure inputs look crisp in light mode */
+html.light input,
+html.light textarea,
+html.light select {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+}

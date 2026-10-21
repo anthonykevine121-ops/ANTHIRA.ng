@@ -1,0 +1,6 @@
+{
+  "name": "ANTHIRA - Website Design & Template Store",
+  "description": "One-stop platform for modern website design services and ready-to-use premium website templates.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
