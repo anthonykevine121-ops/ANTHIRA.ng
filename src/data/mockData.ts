@@ -1,10 +1,21 @@
 import { Template, ServiceItem, Order, PricingPackage, CountryInfo, TemplateReview, TemplateCategoryRate } from '../types';
 
-export const HERO_IMAGE = '/src/assets/images/hero_workspace_display_1792030346761.jpg';
-export const RESTAURANT_IMG = '/src/assets/images/template_restaurant_1792030347290.jpg';
-export const FASHION_IMG = '/src/assets/images/template_fashion_1792030348324.jpg';
-export const ECOMMERCE_IMG = '/src/assets/images/template_ecommerce_1792030348998.jpg';
-export const PORTFOLIO_IMG = '/src/assets/images/template_portfolio_1792030349538.jpg';
+import HERO_IMAGE from '../assets/images/hero_workspace_display_1792030346761.jpg';
+import RESTAURANT_IMG from '../assets/images/template_restaurant_1792030347290.jpg';
+import FASHION_IMG from '../assets/images/template_fashion_1792030348324.jpg';
+import ECOMMERCE_IMG from '../assets/images/template_ecommerce_1792030348998.jpg';
+import PORTFOLIO_IMG from '../assets/images/template_portfolio_1792030349538.jpg';
+
+export { HERO_IMAGE, RESTAURANT_IMG, FASHION_IMG, ECOMMERCE_IMG, PORTFOLIO_IMG };
+
+export const TEMPLATE_FALLBACK_IMAGES = {
+  Restaurant: RESTAURANT_IMG,
+  Fashion: FASHION_IMG,
+  'E-commerce': ECOMMERCE_IMG,
+  Portfolio: PORTFOLIO_IMG,
+  Business: HERO_IMAGE,
+  React: ECOMMERCE_IMG,
+} as const;
 
 // Storefront default currency: display template prices in US dollars.
 export const DEFAULT_CURRENCY = 'USD' as const;

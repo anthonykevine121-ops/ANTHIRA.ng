@@ -8,13 +8,15 @@ interface CustomWebsiteModalProps {
   onClose: () => void;
   preselectedType?: string;
   onSubmitSuccess: (quote: QuoteRequest) => Promise<QuoteNotificationResult>;
+  onWhatsAppOpened: () => void;
 }
 
 export const CustomWebsiteModal: React.FC<CustomWebsiteModalProps> = ({
   isOpen,
   onClose,
   preselectedType,
-  onSubmitSuccess
+  onSubmitSuccess,
+  onWhatsAppOpened
 }) => {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
@@ -71,7 +73,10 @@ export const CustomWebsiteModal: React.FC<CustomWebsiteModalProps> = ({
       } else {
         const whatsappUrl = createWhatsAppUrl(newQuote);
         setFallbackWhatsAppUrl(whatsappUrl);
-        if (whatsappWindow) whatsappWindow.location.href = whatsappUrl;
+        if (whatsappWindow) {
+          whatsappWindow.location.href = whatsappUrl;
+          onWhatsAppOpened();
+        }
         setSubmissionError('WhatsApp notification was unavailable. Your message is ready; tap the button below and send it in WhatsApp.');
       }
     } catch (error) {
@@ -87,7 +92,10 @@ export const CustomWebsiteModal: React.FC<CustomWebsiteModalProps> = ({
       };
       const whatsappUrl = createWhatsAppUrl(newQuote);
       setFallbackWhatsAppUrl(whatsappUrl);
-      if (whatsappWindow) whatsappWindow.location.href = whatsappUrl;
+      if (whatsappWindow) {
+        whatsappWindow.location.href = whatsappUrl;
+        onWhatsAppOpened();
+      }
       setSubmissionError(error instanceof Error
         ? `${error.message} Your WhatsApp message is ready below; tap the button and send it.`
         : 'Unable to reach the notification service. Your WhatsApp message is ready below; tap the button and send it.');
@@ -169,6 +177,7 @@ export const CustomWebsiteModal: React.FC<CustomWebsiteModalProps> = ({
                       href={fallbackWhatsAppUrl}
                       target="_blank"
                       rel="noopener noreferrer"
+                      onClick={onWhatsAppOpened}
                       className="inline-flex items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 font-bold text-white hover:bg-emerald-500"
                     >
                       <MessageCircle className="h-4 w-4" />
@@ -227,26 +236,45 @@ export const CustomWebsiteModal: React.FC<CustomWebsiteModalProps> = ({
               {/* Website Type / Package */}
               <div className="space-y-1.5">
                 <label className="text-xs font-medium text-zinc-300 flex items-center gap-1">
-                  Selected Package / Service <span className="text-[#ff5722]">*</span>
+                  Website Type / Business <span className="text-[#ff5722]">*</span>
                 </label>
                 <select
                   value={websiteType}
                   onChange={(e) => setWebsiteType(e.target.value)}
                   className="w-full px-3.5 py-2.5 bg-[#181c25] border border-white/10 rounded-xl text-xs text-white focus:outline-none focus:border-[#ff5722] transition-colors"
                 >
-                  <optgroup label="Nigeria Packages">
-                    <option value="Basic (₦50,000–₦100,000)">Basic (₦50,000–₦100,000) - Individuals & Small Businesses</option>
-                    <option value="Standard (₦100,000–₦200,000)">Standard (₦100,000–₦200,000) - Small Businesses</option>
-                    <option value="Professional (₦200,000–₦400,000)">Professional (₦200,000–₦400,000) - Growing Businesses</option>
-                    <option value="Premium (₦400,000–₦800,000+)">Premium (₦400,000–₦800,000+) - Established Brands</option>
-                    <option value="E-commerce (₦300,000–₦1,000,000+)">E-commerce (₦300,000–₦1,000,000+) - Online Stores</option>
-                    <option value="Custom Web Application (₦800,000–₦3,000,000+)">Custom Web Application (₦800,000–₦3,000,000+) - Advanced Functionality</option>
-                  </optgroup>
                   <optgroup label="Bespoke Design Services">
                     <option value="Business Website">Business Website</option>
                     <option value="Restaurant Website">Restaurant Website</option>
                     <option value="Fashion Website">Fashion Website</option>
                     <option value="Portfolio Website">Portfolio Website</option>
+                  </optgroup>
+                  <optgroup label="Food & Hospitality">
+                    <option value="Hotel Website">Hotels</option>
+                    <option value="Bakery Website">Bakeries</option>
+                    <option value="Catering Business Website">Catering businesses</option>
+                    <option value="Food Delivery Website">Food delivery businesses</option>
+                  </optgroup>
+                  <optgroup label="Fashion & Beauty">
+                    <option value="Fashion Boutique Website">Fashion boutiques</option>
+                    <option value="Beauty Salon Website">Beauty salons</option>
+                    <option value="Barbershop Website">Barbershops</option>
+                    <option value="Makeup Artist Website">Makeup artists</option>
+                    <option value="Clothing Brand Website">Clothing brands</option>
+                  </optgroup>
+                  <optgroup label="Healthcare & Professional Services">
+                    <option value="Private Hospital or Clinic Website">Private hospitals and clinics</option>
+                    <option value="Dental Clinic Website">Dental clinics</option>
+                    <option value="Law Firm Website">Law firms</option>
+                    <option value="Accounting Firm Website">Accounting firms</option>
+                    <option value="Consultancy Business Website">Consultancy businesses</option>
+                  </optgroup>
+                  <optgroup label="Property, Education & Events">
+                    <option value="Real Estate Agency Website">Real estate agencies</option>
+                    <option value="Property Management Website">Property managers</option>
+                    <option value="Private School Website">Private schools</option>
+                    <option value="Event Planner Website">Event planners</option>
+                    <option value="Photography and Videography Website">Photography and videography businesses</option>
                   </optgroup>
                 </select>
               </div>

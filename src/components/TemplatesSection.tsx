@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Currency, Template, CountryCode } from '../types';
 import { formatPrice } from '../utils/format';
-import { TEMPLATE_CATEGORY_RATES } from '../data/mockData';
+import { TEMPLATE_CATEGORY_RATES, TEMPLATE_FALLBACK_IMAGES, TEMPLATES } from '../data/mockData';
 import { fetchTemplates } from '../lib/templates';
 
 import {
@@ -64,10 +64,11 @@ useEffect(() => {
       console.error('Failed to load templates:', error);
 
       if (!cancelled) {
+        setTemplates(TEMPLATES);
         setLoadError(
           error instanceof Error
-            ? error.message
-            : 'Unable to load templates. Please try again.'
+            ? `Showing the built-in templates because the catalog could not connect to the database: ${error.message}`
+            : 'Showing the built-in templates because the catalog could not connect to the database.'
         );
       }
     } finally {
@@ -411,24 +412,14 @@ const filteredTemplates = useMemo(() => {
       Please wait while we load templates from our database.
     </p>
   </div>
-) : loadError ? (
-  <div className="py-12 text-center rounded-2xl bg-[#141820] border border-red-500/20 p-8">
-    <h3 className="text-base font-bold text-white">
-      Unable to Load Templates
-    </h3>
-
-    <p className="mt-2 text-sm text-zinc-400">
-      {loadError}
-    </p>
-
-    <button
-      onClick={() => window.location.reload()}
-      className="mt-5 px-5 py-2.5 bg-[#ff5722] hover:bg-[#f4511e] text-white text-xs font-semibold rounded-xl"
-    >
-      Try Again
-    </button>
-    </div>
-     ) : filteredTemplates.length === 0 ? (
+) : (
+  <>
+    {loadError && (
+      <p role="status" className="rounded-xl border border-amber-500/20 bg-amber-500/5 px-4 py-3 text-xs text-amber-200">
+        {loadError}
+      </p>
+    )}
+    {filteredTemplates.length === 0 ? (
           <div className="py-16 text-center rounded-2xl bg-[#141820] border border-white/10 p-8 space-y-4">
             <div className="w-16 h-16 mx-auto rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400">
               <Search className="w-7 h-7" />
@@ -464,6 +455,10 @@ const filteredTemplates = useMemo(() => {
                     src={template.image}
                     alt={template.title}
                     referrerPolicy="no-referrer"
+                    onError={(event) => {
+                      event.currentTarget.onerror = null;
+                      event.currentTarget.src = TEMPLATE_FALLBACK_IMAGES[template.category];
+                    }}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
 
@@ -525,8 +520,7 @@ const filteredTemplates = useMemo(() => {
                       ))}
                     </div>
                   )}
-
-                  {/* Tech stack highlights */}
+  {/* Tech stack highlights */}
                   <div className="flex flex-wrap gap-1 text-[10px] text-zinc-400">
                     {template.technologies.slice(0, 3).map((tech, i) => (
                       <span key={i} className="px-1.5 py-0.5 rounded bg-black/30 border border-white/5">
@@ -568,6 +562,8 @@ const filteredTemplates = useMemo(() => {
             ))}
           </div>
         )}
+  </>
+)}
 
       </div>
     </section>

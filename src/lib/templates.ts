@@ -1,7 +1,7 @@
 
 import { getSupabaseClient } from './supabase';
 import type { Template } from '../types';
-import { TEMPLATES } from '../data/mockData';
+import { TEMPLATE_FALLBACK_IMAGES, TEMPLATES } from '../data/mockData';
 
 interface SupabaseTemplate {
   id: string;
@@ -13,22 +13,6 @@ interface SupabaseTemplate {
   preview_image: string | null;
   is_active: boolean;
 }
-
-// Fallback images for templates without a preview image.
-const fallbackImages: Record<string, string> = {
-  Restaurant:
-    '/src/assets/images/template_restaurant_1792030347290.jpg',
-  Fashion:
-    '/src/assets/images/template_fashion_1792030348324.jpg',
-  'E-commerce':
-    '/src/assets/images/template_ecommerce_1792030348998.jpg',
-  Portfolio:
-    '/src/assets/images/template_portfolio_1792030349538.jpg',
-  Business:
-    '/src/assets/images/hero_workspace_display_1792030346761.jpg',
-  React:
-    '/src/assets/images/template_ecommerce_1792030348998.jpg',
-};
 
 const supportedCategories: Template['category'][] = [
   'Business',
@@ -111,11 +95,12 @@ function mapDatabaseTemplate(
       row.title.trim().toLowerCase()
   );
 
+  const previewImage = row.preview_image?.trim();
   const image =
-    row.preview_image?.trim() ||
+    (previewImage && !previewImage.startsWith('/src/assets/') ? previewImage : null) ||
     existingTemplate?.image ||
-    fallbackImages[category] ||
-    fallbackImages.Business;
+    TEMPLATE_FALLBACK_IMAGES[category] ||
+    TEMPLATE_FALLBACK_IMAGES.Business;
 
   const priceUSD = normalizePrice(row.price_usd);
   const priceNGN = normalizePrice(row.price_ngn);

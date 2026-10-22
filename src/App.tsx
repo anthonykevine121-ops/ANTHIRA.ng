@@ -609,6 +609,11 @@ export default function App() {
         onClose={() => setIsCustomModalOpen(false)}
         preselectedType={selectedServiceForQuote}
         onSubmitSuccess={handleQuoteSubmitted}
+        onWhatsAppOpened={() => {
+          setIsCustomModalOpen(false);
+          setCurrentView('storefront');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
       />
 
       {/* 4. Slide-over Shopping Cart */}
