@@ -1,10 +1,16 @@
 import { Template, ServiceItem, Order, PricingPackage, CountryInfo, TemplateReview, TemplateCategoryRate } from '../types';
 
-import HERO_IMAGE from '../assets/images/hero_workspace_display_1792030346761.jpg';
-import RESTAURANT_IMG from '../assets/images/template_restaurant_1792030347290.jpg';
-import FASHION_IMG from '../assets/images/template_fashion_1792030348324.jpg';
-import ECOMMERCE_IMG from '../assets/images/template_ecommerce_1792030348998.jpg';
-import PORTFOLIO_IMG from '../assets/images/template_portfolio_1792030349538.jpg';
+import HERO_IMAGE_ASSET from '../assets/images/hero_workspace_display_1792030346761.jpg';
+import RESTAURANT_ASSET from '../assets/images/template_restaurant_1792030347290.jpg';
+import FASHION_ASSET from '../assets/images/template_fashion_1792030348324.jpg';
+import ECOMMERCE_ASSET from '../assets/images/template_ecommerce_1792030348998.jpg';
+import PORTFOLIO_ASSET from '../assets/images/template_portfolio_1792030349538.jpg';
+
+const HERO_IMAGE = HERO_IMAGE_ASSET.src;
+const RESTAURANT_IMG = RESTAURANT_ASSET.src;
+const FASHION_IMG = FASHION_ASSET.src;
+const ECOMMERCE_IMG = ECOMMERCE_ASSET.src;
+const PORTFOLIO_IMG = PORTFOLIO_ASSET.src;
 
 export { HERO_IMAGE, RESTAURANT_IMG, FASHION_IMG, ECOMMERCE_IMG, PORTFOLIO_IMG };
 

@@ -1,10 +1,9 @@
-import { NextResponse } from "next/server";
-import { createClient } from "@/supabase/server";
+import { NextResponse } from 'next/server';
+import { createClient } from '@/supabase/server';
 
 export async function GET() {
   try {
     const supabase = await createClient();
-
     const { data, error } = await supabase.auth.getSession();
 
     if (error) {
@@ -16,7 +15,7 @@ export async function GET() {
 
     return NextResponse.json({
       success: true,
-      message: "Supabase server client initialized successfully.",
+      message: 'Supabase server client initialized successfully.',
       authenticated: Boolean(data.session),
     });
   } catch (error) {
@@ -24,7 +23,7 @@ export async function GET() {
       {
         success: false,
         message:
-          error instanceof Error ? error.message : "Unknown configuration error",
+          error instanceof Error ? error.message : 'Unknown configuration error',
       },
       { status: 500 }
     );

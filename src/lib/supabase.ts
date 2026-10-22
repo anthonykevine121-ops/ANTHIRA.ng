@@ -3,12 +3,12 @@ import { createClient } from '@supabase/supabase-js';
 import type { User } from '@supabase/supabase-js';
 import type { AuthUser } from '../types';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 
 // Supports either a modern publishable key or a legacy anon key.
 const supabaseKey =
-  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
-  import.meta.env.VITE_SUPABASE_ANON_KEY;
+  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 export const supabase =
   supabaseUrl && supabaseKey
@@ -18,7 +18,7 @@ export const supabase =
 export const getSupabaseClient = () => {
   if (!supabase) {
     throw new Error(
-      'Supabase is not configured. Check VITE_SUPABASE_URL and your publishable or anon key in .env.local, then restart Vite.'
+      'Supabase is not configured. Check NEXT_PUBLIC_SUPABASE_URL and your publishable or anon key in .env.local, then restart Next.js.'
     );
   }
 

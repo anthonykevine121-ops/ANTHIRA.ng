@@ -2,29 +2,26 @@
 <img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
 </div>
 
-# Run and deploy your AI Studio app
+# ANTHIRA
 
-This contains everything you need to run your app locally.
-
-View your app in AI Studio: https://ai.studio/apps/8976ddfd-7c9c-4371-8513-393ee926f4aa
-
-## Run Locally
+## Local development
 
 **Prerequisites:**  Node.js
 
-
 1. Install dependencies:
    `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
+2. Copy [.env.example](.env.example) to `.env.local` and set the Supabase URL and publishable key.
+3. Start the Next.js development server:
    `npm run dev`
+
+Production builds use `npm run build` and `npm start`. Vercel can deploy this project using its Next.js preset.
 
 ## Authentication and verified customers
 
 Authentication is powered by Supabase. Create a Supabase project and configure
-`VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` in `.env.local` for local
-development and as Vercel environment variables for production. Do not put a
-service-role key in the browser or in a `VITE_` variable.
+`NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` in `.env.local` for local
+development and as Vercel environment variables for production. These are public
+client values. Never put a secret/service-role key in a `NEXT_PUBLIC_` variable.
 
 Before deploying:
 
