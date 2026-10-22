@@ -1,22 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Currency, Template, CountryCode } from '../types';
 import { formatPrice } from '../utils/format';
-import { TEMPLATES, TEMPLATE_CATEGORY_RATES, SUPPORTED_COUNTRIES } from '../data/mockData';
-import { 
-  Eye, 
-  ShoppingCart, 
-  Search, 
-  Star, 
-  ArrowRight, 
-  X, 
-  Sparkles, 
-  Filter, 
-  Tag, 
-  RotateCcw, 
-  Globe, 
-  ChevronDown, 
-  ChevronUp, 
-  Table, 
+import { TEMPLATE_CATEGORY_RATES } from '../data/mockData';
+import { fetchTemplates } from '../lib/templates';
+
+import {
+  Eye,
+  ShoppingCart,
+  Search,
+  Star,
+  ArrowRight,
+  X,
+  Sparkles,
+  Filter,
+  Tag,
+  RotateCcw,
+  Globe,
+  ChevronDown,
+  ChevronUp,
 } from 'lucide-react';
 
 interface TemplatesSectionProps {
@@ -35,29 +36,91 @@ export const TemplatesSection: React.FC<TemplatesSectionProps> = ({
   // Selected Country for the category pricing guide
   const [guideCountry, setGuideCountry] = useState<CountryCode>('NG');
   const [showPriceGuideTable, setShowPriceGuideTable] = useState(true);
+  
+  // Templates loaded from Supabase
+const [templates, setTemplates] = useState<Template[]>([]);
+const [isLoading, setIsLoading] = useState(true);
+const [loadError, setLoadError] = useState<string | null>(null);
 
   // Search & Filter state
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
-  const categories = ['All', 'Restaurant', 'Fashion', 'E-commerce', 'Portfolio', 'Business', 'React'];
+  // Load templates from Supabase when the component mounts
+useEffect(() => {
+  let cancelled = false;
 
-  const filteredTemplates = TEMPLATES.filter((tpl) => {
-    const matchesCategory = selectedCategory === 'All' || tpl.category.toLowerCase().includes(selectedCategory.toLowerCase());
+  const loadTemplates = async () => {
+    try {
+      setIsLoading(true);
+      setLoadError(null);
+
+      const data = await fetchTemplates();
+
+      if (!cancelled) {
+        setTemplates(data);
+      }
+    } catch (error) {
+      console.error('Failed to load templates:', error);
+
+      if (!cancelled) {
+        setLoadError(
+          error instanceof Error
+            ? error.message
+            : 'Unable to load templates. Please try again.'
+        );
+      }
+    } finally {
+      if (!cancelled) {
+        setIsLoading(false);
+      }
+    }
+  };
+
+  loadTemplates();
+
+  return () => {
+    cancelled = true;
+  };
+}, []);
+const categories = [
+  'All',
+  'Restaurant',
+  'Fashion',
+  'E-commerce',
+  'Portfolio',
+  'Business',
+  'React',
+];
+
+const filteredTemplates = useMemo(() => {
+  return templates.filter((tpl) => {
+    const matchesCategory =
+      selectedCategory === 'All' ||
+      tpl.category.toLowerCase().includes(selectedCategory.toLowerCase());
+
     const query = searchQuery.toLowerCase().trim();
-    if (!query) return matchesCategory;
+
+    if (!query) {
+      return matchesCategory;
+    }
 
     const matchesSearch =
       tpl.title.toLowerCase().includes(query) ||
       tpl.description.toLowerCase().includes(query) ||
-      Boolean(tpl.tags && tpl.tags.some((tag) => tag.toLowerCase().includes(query))) ||
+      Boolean(tpl.tags?.some((tag) => tag.toLowerCase().includes(query))) ||
       tpl.subtitle.toLowerCase().includes(query) ||
       tpl.category.toLowerCase().includes(query) ||
-      tpl.technologies.some((t) => t.toLowerCase().includes(query)) ||
-      tpl.features.some((f) => f.toLowerCase().includes(query));
+      tpl.technologies.some((tech) =>
+        tech.toLowerCase().includes(query)
+      ) ||
+      tpl.features.some((feature) =>
+        feature.toLowerCase().includes(query)
+      );
 
     return matchesCategory && matchesSearch;
   });
+}, [templates, selectedCategory, searchQuery]);
 
   const handleClearFilters = () => {
     setSelectedCategory('All');
@@ -92,7 +155,11 @@ export const TemplatesSection: React.FC<TemplatesSectionProps> = ({
 
           <div className="flex items-center gap-3">
             <span className="text-xs text-zinc-400 font-mono bg-[#161a22] px-3 py-1.5 rounded-lg border border-white/5">
-              Showing <strong className="text-white">{filteredTemplates.length}</strong> of {TEMPLATES.length} templates
+             Showing{' '}
+            <strong className="text-white">
+              {filteredTemplates.length}
+                 </strong>{' '}
+              of {templates.length} templates
             </span>
           </div>
         </div>
@@ -332,7 +399,36 @@ export const TemplatesSection: React.FC<TemplatesSectionProps> = ({
         {/* =========================================================================
             3. TEMPLATES CATALOG GRID OR EMPTY STATE
            ========================================================================= */}
-        {filteredTemplates.length === 0 ? (
+       {isLoading ? (
+    <div className="py-16 text-center rounded-2xl bg-[#141820] border border-white/10 p-8">
+    <div className="w-10 h-10 mx-auto border-4 border-orange-500/20 border-t-orange-500 rounded-full animate-spin" />
+
+    <h3 className="mt-4 text-base font-bold text-white">
+      Loading Templates...
+    </h3>
+
+    <p className="mt-2 text-xs text-zinc-400">
+      Please wait while we load templates from our database.
+    </p>
+  </div>
+) : loadError ? (
+  <div className="py-12 text-center rounded-2xl bg-[#141820] border border-red-500/20 p-8">
+    <h3 className="text-base font-bold text-white">
+      Unable to Load Templates
+    </h3>
+
+    <p className="mt-2 text-sm text-zinc-400">
+      {loadError}
+    </p>
+
+    <button
+      onClick={() => window.location.reload()}
+      className="mt-5 px-5 py-2.5 bg-[#ff5722] hover:bg-[#f4511e] text-white text-xs font-semibold rounded-xl"
+    >
+      Try Again
+    </button>
+    </div>
+     ) : filteredTemplates.length === 0 ? (
           <div className="py-16 text-center rounded-2xl bg-[#141820] border border-white/10 p-8 space-y-4">
             <div className="w-16 h-16 mx-auto rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400">
               <Search className="w-7 h-7" />

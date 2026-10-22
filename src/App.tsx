@@ -3,6 +3,7 @@ import { Currency, Template, ServiceItem, CartItem, Order, QuoteNotificationResu
 import { TEMPLATES, SERVICES, INITIAL_ORDERS } from './data/mockData';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
+import { getSupabaseClient, supabase, toAuthUser } from './lib/supabase';
 import { AboutSection } from './components/AboutSection';
 import { ServicesSection } from './components/ServicesSection';
 import { PricingSection } from './components/PricingSection';
@@ -20,11 +21,11 @@ import { CustomerDashboard } from './components/CustomerDashboard';
 import { AdminDashboard } from './components/AdminDashboard';
 import { AuthPage } from './components/AuthPage';
 import { Footer } from './components/Footer';
+import { testSupabaseDatabase } from './lib/testSupabase';
 import { MobileBottomNav, MobileTab } from './components/MobileBottomNav';
 import { MobileFloatingCart } from './components/MobileFloatingCart';
 import { AnthiraLogo } from './components/AnthiraLogo';
 import { CheckCircle, ArrowRight, X } from 'lucide-react';
-import { getSupabaseClient, supabase, toAuthUser } from './lib/supabase';
 
 export default function App() {
   // Currency State (default Nigerian Naira ₦ as in the screenshot)
@@ -38,6 +39,12 @@ export default function App() {
     } catch {}
     return 'dark';
   });
+
+   useEffect(() => {
+  testSupabaseDatabase().then((result) => {
+    console.log('SUPABASE DATABASE TEST:', result);
+  });
+  }, []);
 
   useEffect(() => {
     try {
@@ -226,6 +233,11 @@ export default function App() {
     setCart((prev) => prev.filter((item) => item.template.id !== templateId));
   };
 
+  const handleClearCart = () => {
+    setCart([]);
+    setDiscountPercent(0);
+  };
+
   const handleCheckoutSuccess = (purchased: Template[]) => {
     const newOrders: Order[] = purchased.map((tpl, i) => ({
       id: `ORD-${Math.floor(8945 + Math.random() * 500)}`,
@@ -259,6 +271,30 @@ export default function App() {
       body: quote
     });
     if (error) {
+      const context = 'context' in error ? error.context : undefined;
+      if (context instanceof Response) {
+        let detail = '';
+        try {
+          const responseBody: unknown = await context.clone().json();
+          if (responseBody && typeof responseBody === 'object') {
+            if ('message' in responseBody && typeof responseBody.message === 'string') {
+              detail = responseBody.message;
+            } else if ('error' in responseBody && typeof responseBody.error === 'string') {
+              detail = responseBody.error;
+            }
+          }
+        } catch {
+          detail = '';
+        }
+
+        if (context.status === 404) {
+          throw new Error('The notify-quote Supabase Function is not deployed to this project yet. Deploy it, then submit your request again.');
+        }
+        throw new Error(`Unable to send request notifications (HTTP ${context.status})${detail ? `: ${detail}` : `: ${error.message}`}`);
+      }
+      if (error.name === 'FunctionsFetchError') {
+        throw new Error('Could not reach the notify-quote Supabase Function. Check that it is deployed and that this site origin is allowed by its APP_ORIGIN settings.');
+      }
       throw new Error(`Unable to send request notifications: ${error.message}`);
     }
     if (!data) {
@@ -434,6 +470,7 @@ export default function App() {
             currency={currency}
             onUpdateQuantity={handleUpdateQuantity}
             onRemoveItem={handleRemoveFromCart}
+            onClearCart={handleClearCart}
             onProceedToPayment={() => setCurrentView('payment')}
             onContinueShopping={() => setCurrentView('storefront')}
             discountPercent={discountPercent}
@@ -582,6 +619,7 @@ export default function App() {
         currency={currency}
         onUpdateQuantity={handleUpdateQuantity}
         onRemoveItem={handleRemoveFromCart}
+        onClearCart={handleClearCart}
         onCheckoutSuccess={handleCheckoutSuccess}
         onGoToCartPage={() => {
           setIsCartOpen(false);

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, CheckCircle, ArrowRight, Sparkles, Send } from 'lucide-react';
+import { X, CheckCircle, ArrowRight, Sparkles, Send, MessageCircle } from 'lucide-react';
 import { QuoteNotificationResult, QuoteRequest } from '../types';
 import { PhoneNumberInput } from './PhoneNumberInput';
 
@@ -26,6 +26,20 @@ export const CustomWebsiteModal: React.FC<CustomWebsiteModalProps> = ({
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [notificationResult, setNotificationResult] = useState<QuoteNotificationResult | null>(null);
   const [submissionError, setSubmissionError] = useState<string | null>(null);
+  const [fallbackWhatsAppUrl, setFallbackWhatsAppUrl] = useState<string | null>(null);
+
+  const createWhatsAppUrl = (quote: QuoteRequest) => {
+    const message = [
+      'New custom website request',
+      `Name: ${quote.fullName}`,
+      `Email: ${quote.email}`,
+      `Phone: ${quote.phone || 'Not provided'}`,
+      `Service: ${quote.websiteType}`,
+      `Budget: ${quote.budgetRange || 'Not provided'}`,
+      `Project details: ${quote.projectDetails}`
+    ].join('\n');
+    return `https://wa.me/2349018021688?text=${encodeURIComponent(message)}`;
+  };
 
   if (!isOpen) return null;
 
@@ -35,6 +49,8 @@ export const CustomWebsiteModal: React.FC<CustomWebsiteModalProps> = ({
 
     setIsSubmitting(true);
     setSubmissionError(null);
+    setFallbackWhatsAppUrl(null);
+    const whatsappWindow = window.open('about:blank', '_blank');
     try {
       const newQuote: QuoteRequest = {
         id: `REQ-${Date.now().toString().slice(-4)}`,
@@ -50,12 +66,31 @@ export const CustomWebsiteModal: React.FC<CustomWebsiteModalProps> = ({
       const result = await onSubmitSuccess(newQuote);
       setNotificationResult(result);
       if (result.email.sent && result.whatsapp.sent) {
+        whatsappWindow?.close();
         setIsSubmitted(true);
       } else {
-        setSubmissionError('The request was accepted, but one or more notifications could not be delivered.');
+        const whatsappUrl = createWhatsAppUrl(newQuote);
+        setFallbackWhatsAppUrl(whatsappUrl);
+        if (whatsappWindow) whatsappWindow.location.href = whatsappUrl;
+        setSubmissionError('WhatsApp notification was unavailable. Your message is ready; tap the button below and send it in WhatsApp.');
       }
     } catch (error) {
-      setSubmissionError(error instanceof Error ? error.message : 'Unable to submit your request. Please try again.');
+      const newQuote: QuoteRequest = {
+        id: `REQ-${Date.now().toString().slice(-4)}`,
+        fullName,
+        email,
+        phone,
+        websiteType,
+        projectDetails,
+        budgetRange: budget,
+        createdAt: new Date().toISOString()
+      };
+      const whatsappUrl = createWhatsAppUrl(newQuote);
+      setFallbackWhatsAppUrl(whatsappUrl);
+      if (whatsappWindow) whatsappWindow.location.href = whatsappUrl;
+      setSubmissionError(error instanceof Error
+        ? `${error.message} Your WhatsApp message is ready below; tap the button and send it.`
+        : 'Unable to reach the notification service. Your WhatsApp message is ready below; tap the button and send it.');
     } finally {
       setIsSubmitting(false);
     }
@@ -65,6 +100,7 @@ export const CustomWebsiteModal: React.FC<CustomWebsiteModalProps> = ({
     setIsSubmitted(false);
     setNotificationResult(null);
     setSubmissionError(null);
+    setFallbackWhatsAppUrl(null);
     setFullName('');
     setEmail('');
     setPhone('');
@@ -127,6 +163,17 @@ export const CustomWebsiteModal: React.FC<CustomWebsiteModalProps> = ({
                         </li>
                       ))}
                     </ul>
+                  )}
+                  {fallbackWhatsAppUrl && (
+                    <a
+                      href={fallbackWhatsAppUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 font-bold text-white hover:bg-emerald-500"
+                    >
+                      <MessageCircle className="h-4 w-4" />
+                      <span>Send request in WhatsApp</span>
+                    </a>
                   )}
                 </div>
               )}

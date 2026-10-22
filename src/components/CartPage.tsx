@@ -21,6 +21,7 @@ interface CartPageProps {
   currency: Currency;
   onUpdateQuantity: (templateId: string, delta: number) => void;
   onRemoveItem: (templateId: string) => void;
+  onClearCart: () => void;
   onProceedToPayment: () => void;
   onContinueShopping: () => void;
   discountPercent: number;
@@ -32,6 +33,7 @@ export const CartPage: React.FC<CartPageProps> = ({
   currency,
   onUpdateQuantity,
   onRemoveItem,
+  onClearCart,
   onProceedToPayment,
   onContinueShopping,
   discountPercent,
@@ -110,7 +112,16 @@ export const CartPage: React.FC<CartPageProps> = ({
             <div className="rounded-2xl bg-[#12151c] border border-white/10 overflow-hidden shadow-xl">
               <div className="p-4 bg-[#171b24] border-b border-white/10 text-xs font-bold text-zinc-400 uppercase tracking-wider flex items-center justify-between">
                 <span>Selected Templates</span>
-                <span>Commercial Source Code</span>
+                <div className="flex items-center gap-4">
+                  <span className="hidden sm:inline">Commercial Source Code</span>
+                  <button
+                    onClick={onClearCart}
+                    className="inline-flex items-center gap-1.5 text-[11px] font-semibold normal-case tracking-normal text-zinc-400 hover:text-rose-400 transition-colors"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                    <span>Clear cart</span>
+                  </button>
+                </div>
               </div>
 
               <div className="divide-y divide-white/5">

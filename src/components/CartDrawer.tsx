@@ -10,6 +10,7 @@ interface CartDrawerProps {
   currency: Currency;
   onUpdateQuantity: (templateId: string, delta: number) => void;
   onRemoveItem: (templateId: string) => void;
+  onClearCart: () => void;
   onCheckoutSuccess: (purchased: Template[]) => void;
   onGoToCartPage?: () => void;
   onGoToPaymentPage?: () => void;
@@ -22,6 +23,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   currency,
   onUpdateQuantity,
   onRemoveItem,
+  onClearCart,
   onCheckoutSuccess,
   onGoToCartPage,
   onGoToPaymentPage
@@ -116,6 +118,15 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
             </div>
           ) : (
             <div className="space-y-3">
+              <div className="flex justify-end">
+                <button
+                  onClick={onClearCart}
+                  className="inline-flex items-center gap-1.5 text-[11px] font-medium text-zinc-400 hover:text-rose-400 transition-colors"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                  <span>Clear cart</span>
+                </button>
+              </div>
               {cart.map((item) => (
                 <div
                   key={item.template.id}

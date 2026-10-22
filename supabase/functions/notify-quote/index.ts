@@ -17,10 +17,16 @@ interface QuoteNotificationResult {
   whatsapp: { sent: boolean; error?: string };
 }
 
+const allowedOrigins = () => [
+  Deno.env.get('APP_ORIGIN') || '',
+  ...(Deno.env.get('ADDITIONAL_APP_ORIGINS') || '').split(',').map((origin) => origin.trim())
+].filter(Boolean);
+
 const corsHeaders = (origin: string) => ({
-  'Access-Control-Allow-Origin': Deno.env.get('APP_ORIGIN') || origin,
+  'Access-Control-Allow-Origin': allowedOrigins().includes(origin) ? origin : 'null',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Vary': 'Origin',
   'Content-Type': 'application/json'
 });
 
@@ -116,17 +122,18 @@ Deno.serve(async (request) => {
   const headers = corsHeaders(origin);
 
   if (request.method === 'OPTIONS') {
-    return new Response('ok', { headers });
+    return allowedOrigins().includes(origin)
+      ? new Response('ok', { headers })
+      : jsonResponse({ error: 'Origin not allowed.' }, 403, headers);
   }
   if (request.method !== 'POST') {
     return jsonResponse({ error: 'Method not allowed.' }, 405, headers);
   }
 
-  const allowedOrigin = Deno.env.get('APP_ORIGIN');
-  if (!allowedOrigin) {
+  if (allowedOrigins().length === 0) {
     return jsonResponse({ error: 'The notification service is missing its APP_ORIGIN configuration.' }, 500, headers);
   }
-  if (origin !== allowedOrigin) {
+  if (!allowedOrigins().includes(origin)) {
     return jsonResponse({ error: 'Origin not allowed.' }, 403, headers);
   }
 
