@@ -159,12 +159,12 @@ const INITIAL_TESTIMONIALS: TestimonialItem[] = [
 ];
 
 interface TestimonialsSectionProps {
-  onExploreTemplates?: () => void;
+  onViewPackages?: () => void;
   onGetCustomWebsite?: () => void;
 }
 
 export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
-  onExploreTemplates,
+  onViewPackages,
   onGetCustomWebsite,
 }) => {
   const [testimonials, setTestimonials] = useState<TestimonialItem[]>(() => {
@@ -527,17 +527,17 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
               Ready to create your next digital success story?
             </h3>
             <p className="text-xs sm:text-sm text-zinc-400 mt-1">
-              Choose a pre-built production template to launch today or commission an agency-grade bespoke website.
+              Explore our website design packages or commission a bespoke website for your business.
             </p>
           </div>
 
           <div className="flex flex-wrap items-center justify-center gap-3 shrink-0">
-            {onExploreTemplates && (
+            {onViewPackages && (
               <button
-                onClick={onExploreTemplates}
+                onClick={onViewPackages}
                 className="px-5 py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 text-white font-medium text-xs sm:text-sm transition-all"
               >
-                Browse Templates
+                View Packages
               </button>
             )}
             {onGetCustomWebsite && (

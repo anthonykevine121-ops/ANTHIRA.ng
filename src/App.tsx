@@ -5,10 +5,11 @@ import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { getSupabaseClient, supabase, toAuthUser } from './lib/supabase';
 import { AboutSection } from './components/AboutSection';
+import { AboutUsPage } from './components/AboutUsPage';
+import { MessagesPage } from './components/MessagesPage';
 import { ServicesSection } from './components/ServicesSection';
 import { PricingSection } from './components/PricingSection';
 import { CtaBanner } from './components/CtaBanner';
-import { TemplatesSection } from './components/TemplatesSection';
 import { TestimonialsSection } from './components/TestimonialsSection';
 import { FaqSection } from './components/FaqSection';
 import { TemplateDetailModal } from './components/TemplateDetailModal';
@@ -23,7 +24,6 @@ import { AuthPage } from './components/AuthPage';
 import { Footer } from './components/Footer';
 import { testSupabaseDatabase } from './lib/testSupabase';
 import { MobileBottomNav, MobileTab } from './components/MobileBottomNav';
-import { MobileFloatingCart } from './components/MobileFloatingCart';
 import { AnthiraLogo } from './components/AnthiraLogo';
 import { CheckCircle, ArrowRight, X } from 'lucide-react';
 
@@ -61,11 +61,11 @@ export default function App() {
   }, [theme]);
 
   // Main Page View Mode
-  const [currentView, setCurrentView] = useState<'storefront' | 'templates' | 'packages' | 'customer' | 'admin' | 'cart' | 'payment' | 'auth'>('storefront');
+  const [currentView, setCurrentView] = useState<'storefront' | 'packages' | 'messages' | 'about' | 'customer' | 'admin' | 'cart' | 'payment' | 'auth'>('storefront');
   const [authInitialMode, setAuthInitialMode] = useState<'login' | 'signup'>('login');
 
   useEffect(() => {
-    if (currentView === 'templates' || currentView === 'packages') {
+    if (currentView === 'packages' || currentView === 'messages' || currentView === 'about') {
       window.scrollTo({ top: 0, behavior: 'instant' });
     }
   }, [currentView]);
@@ -356,30 +356,20 @@ export default function App() {
     if (tab === 'home') {
       setCurrentView('storefront');
       scrollToSection('hero');
-    } else if (tab === 'templates') {
-      setCurrentView('templates');
     } else if (tab === 'pricing') {
       setCurrentView('packages');
-    } else if (tab === 'cart') {
-      setCurrentView('cart');
-    } else if (tab === 'account') {
-      if (currentUser) {
-        setCurrentView('customer');
-      } else {
-        setAuthInitialMode('login');
-        setCurrentView('auth');
-      }
+    } else if (tab === 'messages' || tab === 'about') {
+      setCurrentView(tab);
     }
   };
 
   const totalCartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
-  const effectiveMobileTab: MobileTab = 
-    currentView === 'cart' ? 'cart' :
-    (currentView === 'customer' || currentView === 'auth') ? 'account' :
-    currentView === 'templates' ? 'templates' :
-    currentView === 'packages' ? 'pricing' :
-    mobileTab;
+  const effectiveMobileTab: MobileTab =
+    currentView === 'packages' || mobileTab === 'pricing' ? 'pricing' :
+    currentView === 'messages' ? 'messages' :
+    currentView === 'about' ? 'about' :
+    'home';
 
   // Render Admin View
   if (currentView === 'admin' && currentUser?.isAdmin) {
@@ -417,80 +407,23 @@ export default function App() {
         </div>
       )}
 
-      {/* Main Header (hidden on dedicated Auth page) */}
-      {currentView !== 'auth' && (
-        <Header
-          cartCount={totalCartCount}
-          onOpenCart={() => setCurrentView('cart')}
-          onNavigateSection={scrollToSection}
-          onOpenCustomModal={() => setIsCustomModalOpen(true)}
-          onOpenCustomerPortal={() => {
-            if (currentUser) {
-              setCurrentView('customer');
-            } else {
-              setAuthInitialMode('login');
-              setCurrentView('auth');
-            }
-          }}
-          theme={theme}
-          onToggleTheme={(t) => setTheme(t)}
-          currentUser={currentUser}
-          onOpenAuth={(mode) => {
-            setAuthInitialMode(mode || 'login');
-            setCurrentView('auth');
-          }}
-          onLogOut={handleLogOut}
-        />
-      )}
+      <Header
+        onNavigateSection={scrollToSection}
+        onOpenMessages={() => setCurrentView('messages')}
+        onOpenAbout={() => setCurrentView('about')}
+        onOpenCustomModal={() => setIsCustomModalOpen(true)}
+        theme={theme}
+        onToggleTheme={(t) => setTheme(t)}
+      />
 
       {/* Main View Router */}
       <main className="flex-1 pb-16 md:pb-0">
-        {currentView === 'auth' ? (
-          <AuthPage
-            initialMode={authInitialMode}
-            onSuccess={handleAuthSuccess}
-            onBackToStore={() => setCurrentView('storefront')}
-          />
-        ) : currentView === 'customer' ? (
-          <CustomerDashboard
-            currency={currency}
-            onBackToStore={() => setCurrentView('storefront')}
-            purchasedTemplates={purchasedTemplates}
-            orders={orders}
-            currentUser={currentUser}
-            onLogOut={handleLogOut}
-          />
-        ) : currentView === 'cart' ? (
-          <CartPage
-            cart={cart}
-            currency={currency}
-            onUpdateQuantity={handleUpdateQuantity}
-            onRemoveItem={handleRemoveFromCart}
-            onClearCart={handleClearCart}
-            onProceedToPayment={() => setCurrentView('payment')}
-            onContinueShopping={() => setCurrentView('storefront')}
-            discountPercent={discountPercent}
-            onApplyPromo={handleApplyPromo}
-          />
-        ) : currentView === 'payment' ? (
-          <PaymentPage
-            cart={cart}
-            currency={currency}
-            discountPercent={discountPercent}
-            currentUser={currentUser}
-            onBackToCart={() => setCurrentView('cart')}
-            onPaymentSuccess={(purchased, order, email) => {
-              handleCheckoutSuccess(purchased);
-              showToast(`Automated payment confirmation email dispatched to ${email.recipientEmail}!`);
-            }}
-            onGoToDashboard={() => setCurrentView('customer')}
-          />
-        ) : currentView === 'templates' ? (
-          <TemplatesSection
-            currency={currency}
-            onSelectTemplate={(tpl) => setDetailTemplate(tpl)}
-            onLiveDemo={(tpl) => setLiveDemoTemplate(tpl)}
-            onBuyNow={handleBuyNow}
+        {currentView === 'messages' ? (
+          <MessagesPage onStartRequest={() => setIsCustomModalOpen(true)} />
+        ) : currentView === 'about' ? (
+          <AboutUsPage
+            onViewServices={() => scrollToSection('services')}
+            onStartProject={() => setIsCustomModalOpen(true)}
           />
         ) : currentView === 'packages' ? (
           <PricingSection
@@ -501,7 +434,7 @@ export default function App() {
           <>
             {/* Hero Section */}
             <Hero
-              onExploreTemplates={() => scrollToSection('templates')}
+              onExplorePackages={() => setCurrentView('packages')}
               onGetCustomWebsite={() => setIsCustomModalOpen(true)}
             />
 
@@ -524,20 +457,12 @@ export default function App() {
             {/* CTA Banner */}
             <CtaBanner
               onGetStarted={() => setIsCustomModalOpen(true)}
-              onBrowseTemplates={() => scrollToSection('templates')}
-            />
-
-            {/* Templates Store Section */}
-            <TemplatesSection
-              currency={currency}
-              onSelectTemplate={(tpl) => setDetailTemplate(tpl)}
-              onLiveDemo={(tpl) => setLiveDemoTemplate(tpl)}
-              onBuyNow={handleBuyNow}
+              onViewPackages={() => setCurrentView('packages')}
             />
 
             {/* Customer Success Stories & Ratings Testimonials Section */}
             <TestimonialsSection
-              onExploreTemplates={() => scrollToSection('templates')}
+              onViewPackages={() => setCurrentView('packages')}
               onGetCustomWebsite={() => setIsCustomModalOpen(true)}
             />
 
@@ -549,31 +474,20 @@ export default function App() {
         )}
       </main>
 
-      {/* Mobile Device Floating Cart Icon (hidden on Auth page) */}
-      {currentView !== 'auth' && (
-        <MobileFloatingCart
-          cartCount={totalCartCount}
-          onOpenCart={() => setCurrentView('cart')}
-        />
-      )}
-
-      {/* Mobile Bottom Navigation Bar matching mockup */}
       <MobileBottomNav
         activeTab={effectiveMobileTab}
         onSelectTab={handleMobileTabSelect}
-        cartCount={totalCartCount}
       />
 
-      {/* Footer (hidden on dedicated Auth page) */}
-      {currentView !== 'auth' && (
-        <Footer
-          onNavigateSection={scrollToSection}
-          onOpenCustomModal={() => setIsCustomModalOpen(true)}
-          onSubscribeSuccess={(email) => {
-            showToast(`Successfully subscribed ${email} to ANTHIRA newsletter!`);
-          }}
-        />
-      )}
+      <Footer
+        onNavigateSection={scrollToSection}
+        onOpenMessages={() => setCurrentView('messages')}
+        onOpenAbout={() => setCurrentView('about')}
+        onOpenCustomModal={() => setIsCustomModalOpen(true)}
+        onSubscribeSuccess={(email) => {
+          showToast(`Successfully subscribed ${email} to ANTHIRA newsletter!`);
+        }}
+      />
 
       {/* Modals & Slide-Overs */}
       {/* 1. Template Detail Modal */}

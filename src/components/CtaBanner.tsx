@@ -3,10 +3,10 @@ import { ArrowRight, CheckCircle2, Shield, Zap } from 'lucide-react';
 
 interface CtaBannerProps {
   onGetStarted: () => void;
-  onBrowseTemplates: () => void;
+  onViewPackages: () => void;
 }
 
-export const CtaBanner: React.FC<CtaBannerProps> = ({ onGetStarted, onBrowseTemplates }) => {
+export const CtaBanner: React.FC<CtaBannerProps> = ({ onGetStarted, onViewPackages }) => {
   const [email, setEmail] = useState('');
   const [isSubscribed, setIsSubscribed] = useState(false);
 
@@ -39,7 +39,7 @@ export const CtaBanner: React.FC<CtaBannerProps> = ({ onGetStarted, onBrowseTemp
               </h2>
 
               <p className="text-xs sm:text-sm text-zinc-300 max-w-lg leading-relaxed">
-                Get a custom website or choose from our premium templates. Your next big project starts here...
+                Get a custom website designed around your goals. Your next big project starts here...
               </p>
 
               {/* CTAs */}
@@ -53,10 +53,10 @@ export const CtaBanner: React.FC<CtaBannerProps> = ({ onGetStarted, onBrowseTemp
                 </button>
 
                 <button
-                  onClick={onBrowseTemplates}
+                  onClick={onViewPackages}
                   className="px-6 py-3 text-xs sm:text-sm font-semibold text-zinc-300 hover:text-white bg-white/5 hover:bg-white/10 border border-white/15 rounded-xl transition-colors"
                 >
-                  Browse Templates
+                  View Packages
                 </button>
               </div>
 

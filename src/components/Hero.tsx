@@ -9,19 +9,19 @@ import {
 } from 'lucide-react';
 
 interface HeroProps {
-  onExploreTemplates: () => void;
+  onExplorePackages: () => void;
   onGetCustomWebsite: () => void;
 }
 
 const animatedWords = [
-  'Premium Templates',
+  'Custom Websites',
   'Beautiful Websites',
   'Modern Web Design',
   'Your Digital Vision',
 ];
 
 export const Hero: React.FC<HeroProps> = ({
-  onExploreTemplates,
+  onExplorePackages,
   onGetCustomWebsite,
 }) => {
   const [wordIndex, setWordIndex] = useState(0);
@@ -76,7 +76,7 @@ export const Hero: React.FC<HeroProps> = ({
             {/* Tagline */}
             <div className="inline-flex items-center gap-2">
               <span className="text-xs font-extrabold uppercase tracking-widest text-[#ff5722]">
-                WEBSITE DESIGN & TEMPLATE STORE
+                WEBSITE DESIGN & DEVELOPMENT
               </span>
             </div>
 
@@ -100,19 +100,17 @@ export const Hero: React.FC<HeroProps> = ({
 
             {/* Subtext */}
             <p className="max-w-xl text-sm leading-relaxed text-zinc-300 sm:text-base">
-              ANTHIRA is your one-stop platform for modern website design
-              services and ready-to-use website templates. Get a professional
-              website built for your business or purchase high-quality
-              templates and launch faster.
+              ANTHIRA helps businesses build a strong online presence with
+              modern, responsive, and high-performing website design services.
             </p>
 
             {/* CTA Buttons */}
             <div className="flex flex-wrap items-center gap-3 pt-2">
               <button
-                onClick={onExploreTemplates}
+                onClick={onExplorePackages}
                 className="flex items-center gap-2 rounded-xl bg-[#ff5722] px-6 py-3.5 text-xs font-bold text-white shadow-lg shadow-orange-500/25 transition-all hover:translate-x-0.5 hover:bg-[#f4511e] active:scale-[0.99] sm:text-sm"
               >
-                <span>Explore Templates</span>
+                <span>Explore Packages</span>
                 <ArrowRight className="h-4 w-4" />
               </button>
 
@@ -138,10 +136,10 @@ export const Hero: React.FC<HeroProps> = ({
               {/* Floating Badge */}
               <div className="absolute right-4 top-4 rounded-xl border border-white/15 bg-[#141820]/90 px-3.5 py-2 text-right shadow-xl backdrop-blur-md">
                 <div className="text-xs font-bold text-white">
-                  Premium Templates
+                  Website Design
                 </div>
                 <div className="text-[10px] font-medium text-orange-400">
-                  Ready to use & customize
+                  Made for your business
                 </div>
               </div>
 

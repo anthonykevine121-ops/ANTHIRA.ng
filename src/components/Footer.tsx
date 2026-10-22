@@ -5,12 +5,16 @@ import { NewsletterSubscription } from './NewsletterSubscription';
 
 interface FooterProps {
   onNavigateSection: (sectionId: string) => void;
+  onOpenMessages: () => void;
+  onOpenAbout: () => void;
   onOpenCustomModal: () => void;
   onSubscribeSuccess?: (email: string) => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({ 
   onNavigateSection, 
+  onOpenMessages,
+  onOpenAbout,
   onOpenCustomModal,
   onSubscribeSuccess
 }) => {
@@ -22,7 +26,7 @@ export const Footer: React.FC<FooterProps> = ({
           <div className="lg:col-span-4 space-y-4">
             <AnthiraLogo size="md" showSubtitle={true} />
             <p className="text-zinc-400 text-xs leading-relaxed max-w-sm">
-              ANTHIRA is your premier destination for high-performance bespoke website design services and production-grade ready-to-use modern web templates.
+              ANTHIRA designs and builds modern, high-performance websites tailored to your business.
             </p>
             <div className="text-[11px] text-zinc-500">
               Trusted by 500+ businesses and digital entrepreneurs globally.
@@ -35,10 +39,18 @@ export const Footer: React.FC<FooterProps> = ({
               Quick Links
             </h4>
             <ul className="space-y-2">
-              {['Home', 'Services', 'Templates', 'Portfolio', 'Pricing', 'About', 'Contact'].map((item) => (
+              {['Home', 'Services', 'Pricing', 'Messages', 'About Us'].map((item) => (
                 <li key={item}>
                   <button
-                    onClick={() => onNavigateSection(item.toLowerCase())}
+                    onClick={() => {
+                      if (item === 'Messages') {
+                        onOpenMessages();
+                      } else if (item === 'About Us') {
+                        onOpenAbout();
+                      } else {
+                        onNavigateSection(item === 'Home' ? 'hero' : item.toLowerCase());
+                      }
+                    }}
                     className="hover:text-orange-400 transition-colors"
                   >
                     {item}
