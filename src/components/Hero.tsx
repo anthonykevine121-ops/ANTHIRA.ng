@@ -7,7 +7,6 @@ import {
   ShieldCheck,
   Headphones,
 } from 'lucide-react';
-import { HERO_IMAGE } from '../data/mockData';
 
 interface HeroProps {
   onExploreTemplates: () => void;
@@ -128,12 +127,12 @@ export const Hero: React.FC<HeroProps> = ({
 
           {/* Right Column: Image Showcase */}
           <div className="hero-enter hero-enter-delay-2 relative lg:col-span-6">
-            <div className="group relative mx-auto max-w-lg overflow-hidden rounded-2xl border border-white/15 bg-black/40 shadow-2xl lg:max-w-none">
+            <div className="group relative mx-auto max-w-lg overflow-hidden rounded-2xl bg-black/40 shadow-2xl lg:max-w-none">
               <img
-                src={HERO_IMAGE}
-                alt="ANTHIRA premium website design workspace"
+                src="/hero.png"
+                alt="ANTHIRA website design shown on a laptop"
                 referrerPolicy="no-referrer"
-                className="h-auto w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                className="hero-image-motion h-auto w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
               />
 
               {/* Floating Badge */}
