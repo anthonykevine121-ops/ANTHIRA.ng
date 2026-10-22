@@ -30,7 +30,7 @@ export const PricingSection: React.FC<PricingSectionProps> = ({
   };
 
   return (
-    <section id="pricing" className="py-20 bg-[#0a0c10] border-t border-white/5 relative">
+    <section id="pricing" className="py-20 bg-[#0a0c10] border-t border-white/5 relative overflow-hidden">
       {/* Ambient background glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[350px] bg-gradient-to-r from-orange-600/10 via-amber-600/5 to-transparent blur-3xl pointer-events-none -z-10" />
 
@@ -104,7 +104,7 @@ export const PricingSection: React.FC<PricingSectionProps> = ({
         {/* 1. Country Comparison Matrix View (Exact table matching prompt) */}
         {viewMode === 'matrix' ? (
           <div className="overflow-hidden rounded-2xl bg-[#12151c] border border-white/10 shadow-2xl">
-            <div className="p-4 sm:p-5 border-b border-white/10 bg-[#171b24] flex items-center justify-between">
+            <div className="p-4 sm:p-5 border-b border-white/10 bg-[#171b24] flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <h3 className="text-sm font-bold text-white">
                   Regional Pricing Comparison
@@ -113,7 +113,7 @@ export const PricingSection: React.FC<PricingSectionProps> = ({
                   Direct pricing comparison across Nigeria, United States, and United Kingdom
                 </p>
               </div>
-              <span className="text-xs font-mono text-orange-400 font-semibold bg-orange-500/10 px-2.5 py-1 rounded-lg border border-orange-500/20">
+              <span className="self-start text-xs font-mono text-orange-400 font-semibold bg-orange-500/10 px-2.5 py-1 rounded-lg border border-orange-500/20">
                 Multi-Currency Matrix
               </span>
             </div>
@@ -289,7 +289,7 @@ export const PricingSection: React.FC<PricingSectionProps> = ({
             <span className="text-base">🌍</span>
             <span>We serve clients globally across Nigeria (Paystack, Flutterwave), the US, and UK (Stripe, Wire, Card).</span>
           </div>
-          <span className="text-orange-400 font-medium whitespace-nowrap">
+          <span className="text-orange-400 font-medium text-center sm:text-right sm:whitespace-nowrap">
             Flexible milestones: 50% upfront & 50% on verified launch.
           </span>
         </div>

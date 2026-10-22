@@ -79,11 +79,7 @@ export default function App() {
   const [mobileTab, setMobileTab] = useState<MobileTab>('home');
 
   // Interactive Shopping Cart State
-  const [cart, setCart] = useState<CartItem[]>(() => {
-    return [
-      { template: TEMPLATES[0], quantity: 1 } // Start with Restaurant Website in cart for immediate interactivity
-    ];
-  });
+  const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
   // Active Modals State
@@ -448,7 +444,7 @@ export default function App() {
       )}
 
       {/* Main View Router */}
-      <main className="flex-1 pb-16 sm:pb-0">
+      <main className="flex-1 pb-16 md:pb-0">
         {currentView === 'auth' ? (
           <AuthPage
             initialMode={authInitialMode}

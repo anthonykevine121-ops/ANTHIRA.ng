@@ -2,6 +2,64 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+@keyframes hero-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-enter {
+  animation: hero-fade-up 650ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.hero-enter-delay-1 {
+  animation-delay: 100ms;
+}
+
+.hero-enter-delay-2 {
+  animation-delay: 180ms;
+}
+
+.hero-enter-delay-3 {
+  animation-delay: 260ms;
+}
+
+.hero-enter-delay-4 {
+  animation-delay: 340ms;
+}
+
+@keyframes hero-word-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(0.45em);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-word-reveal {
+  display: inline-block;
+  animation: hero-word-reveal 550ms cubic-bezier(0.2, 0.7, 0.2, 1) 250ms both;
+}
+
+.hero-word-reveal-delay {
+  animation-delay: 430ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-enter,
+  .hero-word-reveal {
+    animation: none;
+  }
+}
+
 /* Smooth theme transitions */
 html, body {
   transition: background-color 0.2s ease, color 0.2s ease;

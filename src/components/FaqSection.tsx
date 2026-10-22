@@ -94,7 +94,7 @@ export const FaqSection: React.FC<FaqSectionProps> = ({ onOpenCustomModal }) => 
           </p>
 
           {/* Category Filter Chips */}
-          <div className="flex items-center justify-center gap-1.5 pt-4">
+          <div className="flex flex-wrap items-center justify-center gap-1.5 pt-4">
             {[
               { id: 'all', label: 'All Questions' },
               { id: 'licensing', label: 'Template Licensing' },

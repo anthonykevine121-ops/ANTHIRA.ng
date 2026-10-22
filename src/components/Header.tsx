@@ -104,7 +104,7 @@ export const Header: React.FC<HeaderProps> = ({
             {/* Quick Theme Toggle Button */}
             <button
               onClick={() => onToggleTheme(theme === 'dark' ? 'light' : 'dark')}
-              className="p-2 rounded-lg bg-black/40 border border-white/10 text-zinc-300 hover:text-white hover:border-white/20 transition-colors flex items-center justify-center"
+              className="hidden min-[380px]:flex p-2 rounded-lg bg-black/40 border border-white/10 text-zinc-300 hover:text-white hover:border-white/20 transition-colors items-center justify-center"
               title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
               aria-label="Toggle color theme"
             >
@@ -236,7 +236,7 @@ export const Header: React.FC<HeaderProps> = ({
             {/* Get Started CTA Button */}
             <button
               onClick={onOpenCustomModal}
-              className="px-4 py-2 text-xs font-bold text-white bg-[#ff5722] hover:bg-[#f4511e] rounded-xl transition-all shadow-md shadow-orange-500/20 whitespace-nowrap"
+              className="px-2 py-2 text-[10px] font-bold text-white bg-[#ff5722] hover:bg-[#f4511e] rounded-xl transition-all shadow-md shadow-orange-500/20 whitespace-nowrap sm:px-4 sm:text-xs"
             >
               Get Started
             </button>
